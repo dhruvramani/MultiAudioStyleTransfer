@@ -1,8 +1,13 @@
+._*
+*.DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
+save/
+misc/Autoencoder/models/
+misc/Autoencoder/Features
 # C extensions
 *.so
 
