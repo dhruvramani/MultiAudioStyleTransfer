@@ -13,10 +13,14 @@ from torchvision.utils import save_image
 
 from models import *
 from feature import *
-from vctk import VCTK
+from dataset import *
+#from vctk import VCTK
 from utils import progress_bar
 
-
+# TODO : Search for dataset
+# TODO : Combine audio after style transfer
+# TODO : Split audio code in dataset.py
+# TODO : Implement test
 parser = argparse.ArgumentParser(description='PyTorch Audio Style Transfer')
 parser.add_argument('--epochs', '-e', type=int, default=4, help='Number of epochs to train.')
 parser.add_argument('--batch_size', default=25, type=int)
@@ -38,50 +42,6 @@ args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 loss_fn = torch.nn.MSELoss() # MaskedMSE()
-
-def load_audio(audio_path):
-    signal, fs = librosa.load(audio_path)
-    return signal, fs
-
-def collate_fn(data):
-    data = list(filter(lambda x: type(x[1]) != int, data))
-    audios, captions = zip(*data)
-    data = None
-    del data
-    audios = torch.stack(audios, 0)
-    return audios, captions
-
-def inp_transform(inp):
-    inp = inp.numpy()
-    inp = inp.flatten()
-    inp, _ = transform_stft(inp)
-    inp = torch.Tensor(inp)
-    inp = inp.unsqueeze(0)
-    return inp
-
-def test_transform(inp):
-    inp = inp.numpy()
-    inp = inp.astype(np.float32)
-    inp = inp.flatten()
-    inp, phase = transform_stft(inp, pad=False)
-    inp = torch.Tensor(inp)
-    inp = inp.unsqueeze(0)
-    inp = inp.unsqueeze(0)
-    return inp, phase
-
-def get_style(path='style_lady.wav'):
-    path = '../save/style/' + path
-    N_FFT = 128
-    signal, fs = librosa.load(path)
-    del fs
-    signal = librosa.stft(signal, n_fft=N_FFT)
-    signal, phase = librosa.magphase(signal)
-    del phase
-    signal = np.log1p(signal)
-    signal = signal[ :, 1200:1500]
-    signal = torch.from_numpy(signal) # TODO : get style audio
-    signal = signal.unsqueeze(0)
-    return signal
 
 def train_lossn(network_params):
     ida, epoch, lstep, lr, dataset = network_params["id"], network_params["epoch"], network_params["step"], network_params["lr"], network_params["dataset"]
@@ -233,29 +193,6 @@ def train_transformation(network_params):
     network_params["network"] = [t_net, encoder]
     return network_params
 
-
-def test():
-    global t_net
-    t_net.load_state_dict(torch.load('../save/transform/trans_model.ckpt'))
-    vdataset = VCTK('/home/nevronas/dataset/', download=False)
-    #dataloader = DataLoader(vdataset, batch_size=1)
-    #audio, _ = next(iter(dataloader))
-    audio, fs = load_audio('/home/nevronas/dataset/vctk/raw/p225_308.wav')
-    audio = torch.Tensor(audio)
-    audio, phase = test_transform(audio)
-    audio = audio.to(device)
-    out = t_net(audio)
-    out = out[0].detach().cpu().numpy()
-    audio = audio[0].cpu().numpy()
-    matplotlib.image.imsave('../save/plots/input/audio.png', audio[0])
-    matplotlib.image.imsave('../save/plots/output/stylized_audio.png', out[0])
-    aud_res = reconstruction(audio[0], phase)
-    out_res = reconstruction(out[0], phase[:, :-3])
-    librosa.output.write_wav("../save/plots/input/raw_audio.wav", aud_res, fs)
-    librosa.output.write_wav("../save/plots/output/raw_output.wav", out_res, fs)
-    print("Testing Finished")
-
-
 def train_multiast():
     # TODO : Change plis
     print('==> Preparing data..')
@@ -343,6 +280,27 @@ def train_multiast():
     for epoch in range(tsepoch2, tsepoch2 + args.epochs):
         network_dict["t2"] = train_transformation(network_dict["t2"])
 
+def test():
+    # TODO : Change completely
+    global t_net
+    t_net.load_state_dict(torch.load('../save/transform/trans_model.ckpt'))
+    #vdataset = VCTK('/home/nevronas/dataset/', download=False)
+    #dataloader = DataLoader(vdataset, batch_size=1)
+    #audio, _ = next(iter(dataloader))
+    audio, fs = load_audio('/home/nevronas/dataset/vctk/raw/p225_308.wav')
+    audio = torch.Tensor(audio)
+    audio, phase = test_transform(audio)
+    audio = audio.to(device)
+    out = t_net(audio)
+    out = out[0].detach().cpu().numpy()
+    audio = audio[0].cpu().numpy()
+    matplotlib.image.imsave('../save/plots/input/audio.png', audio[0])
+    matplotlib.image.imsave('../save/plots/output/stylized_audio.png', out[0])
+    aud_res = reconstruction(audio[0], phase)
+    out_res = reconstruction(out[0], phase[:, :-3])
+    librosa.output.write_wav("../save/plots/input/raw_audio.wav", aud_res, fs)
+    librosa.output.write_wav("../save/plots/output/raw_output.wav", out_res, fs)
+    print("Testing Finished")
 
 if __name__ == '__main__':
     train_multiast()
