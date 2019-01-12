@@ -48,41 +48,39 @@ def get_style(path='style_lady.wav'):
     return signal
 
 class CombinedDataset(Dataset):
-    def __init__(self, path):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev'):
         self.path = path
+        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
 
     def __len__(self):
-        return len([name for name in os.listdir(self.path) if os.path.isfile(name)])
+        return len(self.folder_names)
 
     def __getitem__(self, idx):
-        return load_audio("{}/file{}.mp3".format(self.path, idx))
+        return load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ ")))
 
-class ForegroundDataset(Dataset):
-    def __init__(self, combined_ds):
-        self.dataloader = DataLoader(combined_ds, batch_size=1, shuffle=True,  collate_fn=collate_fn)
-        self.dataloader = iter(self.dataloader)
+class VocalDataset(Dataset):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev'):
+        self.path = path
+        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
 
     def __len__(self):
-        return len(self.dataloader)
-
-    def get_foreground(self, audio):
-        pass # TODO : FINISH THIS
+        return len(self.folder_names)
 
     def __getitem__(self, idx):
-        audio = next(self.dataloader)
-        return self.get_foreground(audio)
+        return load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ ")))
 
 class BackgroundDataset(Dataset):
-    def __init__(self, combined_ds):
-        self.dataloader = DataLoader(combined_ds, batch_size=1, shuffle=True,  collate_fn=collate_fn)
-        self.dataloader = iter(self.dataloader)
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=3):
+        self.path = path
+        self.n_splits = n_splits
+        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
 
     def __len__(self):
-        return len(self.dataloader)
-
-    def get_background(self, audio):
-        pass # TODO : FINISH THIS
+        return len(self.folder_names)
 
     def __getitem__(self, idx):
-        audio = next(self.dataloader)
-        return self.get_background(audio)
+        bass_path = "{}/{}/bass.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
+        drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
+        other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
+        paths = [bass_path, drums_path, other_path]
+        return (paths[i] for i in range(self.n_splits))

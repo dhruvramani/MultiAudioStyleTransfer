@@ -17,9 +17,8 @@ from dataset import *
 #from vctk import VCTK
 from utils import progress_bar
 
-# TODO : Search for dataset
+# NOTE : Change the code to run on background_ds
 # TODO : Combine audio after style transfer
-# TODO : Split audio code in dataset.py
 # TODO : Implement test
 parser = argparse.ArgumentParser(description='PyTorch Audio Style Transfer')
 parser.add_argument('--epochs', '-e', type=int, default=4, help='Number of epochs to train.')
@@ -196,8 +195,8 @@ def train_transformation(network_params):
 def train_multiast():
     # TODO : Change plis
     print('==> Preparing data..')
-    combined_ds = CombinedDataset('/home/nevronas/dataset/', download=False, transform=inp_transform)
-    foreground_ds, background_ds = ForegroundDataset(combined_ds), BackgroundDataset(combined_ds)
+    combined_ds = CombinedDataset()
+    foreground_ds, background_ds = VocalDataset(), BackgroundDataset()
     del combined_ds
     
     print('==> Creating networks..')
@@ -210,12 +209,12 @@ def train_multiast():
         if(os.path.isfile('../save/loss1/loss_encoder.ckpt')):
             enc1.load_state_dict(torch.load('../save/loss1/loss_encoder.ckpt'))
             dec1.load_state_dict(torch.load('../save/loss1/loss_decoder.ckpt'))
-            print("=> Loss Network : loaded")
+            print("=> Loss Network 1 : loaded")
 
-        if(os.path.isfile("../save/loss/info.txt")):
+        if(os.path.isfile("../save/loss1/info.txt")):
             with open("../save/loss1/info.txt", "r") as f:
                 lsepoch1, lstep1 = (int(i) for i in str(f.read()).split(" "))
-                print("=> Loss Network : prev epoch found")
+                print("=> Loss Network 1 : prev epoch found")
 
         with open("../save/loss1/logs/transform_train_loss.log", "w+") as f:
             pass 
@@ -224,12 +223,12 @@ def train_multiast():
         if(os.path.isfile('../save/loss2/loss_encoder.ckpt')):
             enc2.load_state_dict(torch.load('../save/loss2/loss_encoder.ckpt'))
             dec2.load_state_dict(torch.load('../save/loss2/loss_decoder.ckpt'))
-            print("=> Loss Network : loaded")
+            print("=> Loss Network 2 : loaded")
 
-        if(os.path.isfile("../save/loss/info.txt")):
+        if(os.path.isfile("../save/loss2/info.txt")):
             with open("../save/loss2/info.txt", "r") as f:
                 lsepoch2, lstep2 = (int(i) for i in str(f.read()).split(" "))
-                print("=> Loss Network : prev epoch found")
+                print("=> Loss Network 2 : prev epoch found")
 
         with open("../save/loss2/logs/transform_train_loss.log", "w+") as f:
             pass 
@@ -237,12 +236,12 @@ def train_multiast():
     if(args.resume1):
         if(os.path.isfile('../save/transform1/trans_model.ckpt')):
             t_net1.load_state_dict(torch.load('../save/transform1/trans_model.ckpt'))
-            print('==> Transformation network : loaded')
+            print('==> Transformation network 1 : loaded')
 
         if(os.path.isfile("../save/transform1/info.txt")):
             with open("../save/transform1/info.txt", "r") as f:
                 tsepoch1, tstep1 = (int(i) for i in str(f.read()).split(" "))
-            print("=> Transformation network : prev epoch found")
+            print("=> Transformation network 1 : prev epoch found")
 
             # To get logs of current run only
         with open("../save/transform1/logs/transform_train_loss.log", "w+") as f:
@@ -251,12 +250,12 @@ def train_multiast():
     if(args.resume2):
         if(os.path.isfile('../save/transform2/trans_model.ckpt')):
             t_net2.load_state_dict(torch.load('../save/transform2/trans_model.ckpt'))
-            print('==> Transformation network : loaded')
+            print('==> Transformation network 2 : loaded')
 
         if(os.path.isfile("../save/transform2/info.txt")):
             with open("../save/transform2/info.txt", "r") as f:
                 tsepoch2, tstep2 = (int(i) for i in str(f.read()).split(" "))
-            print("=> Transformation network : prev epoch found")
+            print("=> Transformation network 2 : prev epoch found")
 
             # To get logs of current run only
         with open("../save/transform2/logs/transform_train_loss.log", "w+") as f:
@@ -271,14 +270,16 @@ def train_multiast():
     for epoch in range(lsepoch1, lsepoch1 + args.epoch):
         network_dict["l1"] = train_lossn(network_dict["l1"])
 
-    for epoch in range(lsepoch2, lsepoch1 + args.epoch):
-        network_dict["l2"] = train_lossn(network_dict["l2"])
+    # NOTE : Uncomment    
+    #for epoch in range(lsepoch2, lsepoch1 + args.epoch):
+    #    network_dict["l2"] = train_lossn(network_dict["l2"])
 
     for epoch in range(tsepoch1, tsepoch1 + args.epochs):
         network_dict["t1"] = train_transformation(network_dict["t1"])
 
-    for epoch in range(tsepoch2, tsepoch2 + args.epochs):
-        network_dict["t2"] = train_transformation(network_dict["t2"])
+   # NOTE : Uncomment  
+   # for epoch in range(tsepoch2, tsepoch2 + args.epochs):
+   #     network_dict["t2"] = train_transformation(network_dict["t2"])
 
 def test():
     # TODO : Change completely
