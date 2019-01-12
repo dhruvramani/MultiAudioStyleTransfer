@@ -196,7 +196,7 @@ def train_multiast():
     # TODO : Change plis
     print('==> Preparing data..')
     combined_ds = CombinedDataset()
-    foreground_ds, background_ds = VocalDataset(), BackgroundDataset()
+    foreground_ds, background_ds = VocalDataset(), BackgroundDataset(n_splits=1)
     del combined_ds
     
     print('==> Creating networks..')

@@ -82,5 +82,5 @@ class BackgroundDataset(Dataset):
         bass_path = "{}/{}/bass.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
         drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
         other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
-        paths = [bass_path, drums_path, other_path]
+        paths = [drums_path, bass_path, other_path]
         return (paths[i] for i in range(self.n_splits))
