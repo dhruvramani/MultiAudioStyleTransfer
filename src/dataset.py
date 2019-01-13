@@ -57,7 +57,7 @@ class CombinedDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        return load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx])
+        return load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx]))
 
 class VocalDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev'):
@@ -68,7 +68,7 @@ class VocalDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        return load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx])
+        return load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
 
 class BackgroundDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=3):
@@ -84,7 +84,7 @@ class BackgroundDataset(Dataset):
         drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx])
         other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx])
         paths = [drums_path, bass_path, other_path]
-        return (paths[i] for i in range(self.n_splits))
+        return (load_audio(paths[i]) for i in range(self.n_splits))
 
 
 if __name__ == "__main__":
