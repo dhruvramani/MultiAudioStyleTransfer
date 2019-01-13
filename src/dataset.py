@@ -92,5 +92,6 @@ if __name__ == "__main__":
     dataloader = DataLoader(data, batch_size=1)
     print(len(data))
     for foo in dataloader:
-        print(foo[0].shape)
+        foo = inp_transform(foo[0])
+        print(foo.shape)
         break
