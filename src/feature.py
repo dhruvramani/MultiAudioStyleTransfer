@@ -3,7 +3,7 @@ import os
 import numpy as np
 import glob
 
-N_FFT = 1024
+N_FFT = 2048
 def transform_stft(signal, pad=False):
     D = librosa.stft(signal, n_fft=N_FFT)
     S, phase = librosa.magphase(D)
