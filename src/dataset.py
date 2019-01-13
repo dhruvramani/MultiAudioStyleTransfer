@@ -4,6 +4,8 @@ import librosa
 import numpy as np 
 from torch.utils.data import Dataset, DataLoader
 
+from feature import *
+
 def load_audio(audio_path):
     signal, fs = librosa.load(audio_path)
     return signal, fs
