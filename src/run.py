@@ -21,12 +21,12 @@ from utils import progress_bar
 # TODO : Combine audio after style transfer
 # TODO : Implement test
 parser = argparse.ArgumentParser(description='PyTorch Audio Style Transfer')
-parser.add_argument('--epochs', '-e', type=int, default=4, help='Number of epochs to train.')
+parser.add_argument('--epoch', '-e', type=int, default=4, help='Number of epochs to train.')
 parser.add_argument('--batch_size', default=25, type=int)
 
-parser.add_argument('--resume1', '-r1', type=int, default=1, help='resume transform1 from checkpoint')
+parser.add_argument('--resume1', '-r1', type=int, default=0, help='resume transform1 from checkpoint')
 parser.add_argument('--lr1', default=0.001, type=float, help='learning rate for transform1') 
-parser.add_argument('--resume2', '-r2', type=int, default=1, help='resume transform2 from checkpoint')
+parser.add_argument('--resume2', '-r2', type=int, default=0, help='resume transform2 from checkpoint')
 parser.add_argument('--lr2', default=0.001, type=float, help='learning rate for transform2') 
 # Loss network trainer
 parser.add_argument('--lresume1', type=int, default=0, help='Resume network from checkpoint for loss network 1')
@@ -73,7 +73,7 @@ def train_lossn(network_params):
 
         del audios
         train_loss += loss.item()
-
+        print(train_loss)
         with open("../save/loss{}/logs/lossn_train_loss.log".format(ida), "a+") as lfile:
             lfile.write("{}\n".format(train_loss / (i - lstep +1)))
 
@@ -89,11 +89,12 @@ def train_lossn(network_params):
         progress_bar(i, len(dataloader), 'Loss: %.3f' % (train_loss / (i - lstep + 1)))
 
     lstep = 0
-    del dataloader
-    del vdataset
-    print('=> Loss {} Network : Epoch [{}/{}], Loss:{:.4f}'.format(ida, epoch + 1, 5, train_loss / len(data_loader)))
+    #del dataloader
+    #del vdataset
+    print('=> Loss {} Network : Epoch [{}/{}], Loss:{:.4f}'.format(ida, epoch + 1, 5, train_loss / len(dataloader)))
     network_params["epoch"], network_params["step"] = epoch, lstep 
     network_params["network"] = [encoder, decoder]
+    del dataloader
     return network_params
 
 def train_transformation(network_params):
