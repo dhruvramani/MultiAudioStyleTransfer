@@ -80,9 +80,9 @@ class BackgroundDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        bass_path = "{}/{}/bass.wav".format(self.path, self.folder_names[idx].replace(" ", "\ "))
-        drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx].replace(" ", "\ "))
-        other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx].replace(" ", "\ "))
+        bass_path = "{}/{}/bass.wav".format(self.path, self.folder_names[idx])
+        drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx])
+        other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx])
         paths = [drums_path, bass_path, other_path]
         return (paths[i] for i in range(self.n_splits))
 
