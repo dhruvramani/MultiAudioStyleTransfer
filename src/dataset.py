@@ -84,3 +84,12 @@ class BackgroundDataset(Dataset):
         other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx].replace(" ", "\\ "))
         paths = [drums_path, bass_path, other_path]
         return (paths[i] for i in range(self.n_splits))
+
+
+if __name__ == "__main__":
+    data = CombinedDataset()
+    dataloader = DataLoader(data, batch_size=1)
+
+    for foo in dataloader:
+        print(foo)
+        break
