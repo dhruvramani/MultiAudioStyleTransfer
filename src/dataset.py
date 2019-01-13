@@ -92,5 +92,5 @@ if __name__ == "__main__":
     dataloader = DataLoader(data, batch_size=1)
     print(len(data))
     for foo in dataloader:
-        print(foo)
+        print(foo.shape)
         break
