@@ -50,7 +50,7 @@ def get_style(path='style_lady.wav'):
 class CombinedDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev'):
         self.path = path
-        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
+        self.folder_names = [name for name in os.listdir(self.path)]
 
     def __len__(self):
         return len(self.folder_names)
@@ -61,7 +61,7 @@ class CombinedDataset(Dataset):
 class VocalDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev'):
         self.path = path
-        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
+        self.folder_names = [name for name in os.listdir(self.path)]
 
     def __len__(self):
         return len(self.folder_names)
@@ -73,7 +73,7 @@ class BackgroundDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=3):
         self.path = path
         self.n_splits = n_splits
-        self.folder_names = [name for name in os.listdir(self.path) if os.path.isfile(name)]
+        self.folder_names = [name for name in os.listdir(self.path)]
 
     def __len__(self):
         return len(self.folder_names)
