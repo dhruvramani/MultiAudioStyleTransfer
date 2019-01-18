@@ -71,6 +71,12 @@ def train_lossn(network_params):
             loss.backward()
             optimizer.step()
 
+            a1 = audio[0].cpu().numpy()
+            a2 = output[0].detach().cpu().numpy()
+            matplotlib.image.imsave('../save/plots/input/loss1/before.png', a1[0])
+            matplotlib.image.imsave('../save/plots/input/loss2/after.png', a2[0])
+        
+
         del audios
         train_loss += loss.item()
         print(train_loss)
@@ -131,8 +137,7 @@ def train_transformation(network_params):
         if(type(audios) == int):
             print("=> Transformation {} Network : Chucked Sample".format(ida))
             continue
-
-        audios = (audios[:, :, :, 0:300].to(device), audios[:, :, :, 300:600].to(device), audios[:, :, :, 600:900].to(device))
+        audios = audios.to(device)
         for audio in audios : # LOL - splitting coz GPU
             optimizer.zero_grad()
             y_t = t_net(audio)
@@ -267,15 +272,15 @@ def train_multiast():
                     "t2" : {"id" : 2, "network" : [t_net2, enc2], "lr" : args.lr2, "epoch" : tsepoch2, "step" : tstep2, "dataset" : background_ds, "style" : "guy.mp3"},
                     "l1" : {"id" : 1, "network" : [enc1, dec1], "lr" : args.loss_lr1, "epoch" : lsepoch1, "step" : lstep1, "dataset" : foreground_ds},
                     "l2" : {"id" : 2, "network" : [enc2, dec2], "lr" : args.loss_lr2, "epoch" : lsepoch2, "step" : lstep2, "dataset" : background_ds}}
-    for epoch in range(lsepoch1, lsepoch1 + args.epoch):
-        network_dict["l1"] = train_lossn(network_dict["l1"])
+    # for epoch in range(lsepoch1, lsepoch1 + args.epoch):
+    #     network_dict["l1"] = train_lossn(network_dict["l1"])
 
     # NOTE : Uncomment    
-    #for epoch in range(lsepoch2, lsepoch1 + args.epoch):
-    #    network_dict["l2"] = train_lossn(network_dict["l2"])
+    for epoch in range(lsepoch2, lsepoch1 + args.epoch):
+       network_dict["l2"] = train_lossn(network_dict["l2"])
 
-    for epoch in range(tsepoch1, tsepoch1 + args.epochs):
-        network_dict["t1"] = train_transformation(network_dict["t1"])
+    # for epoch in range(tsepoch1, tsepoch1 + args.epochs):
+    #     network_dict["t1"] = train_transformation(network_dict["t1"])
 
    # NOTE : Uncomment  
    # for epoch in range(tsepoch2, tsepoch2 + args.epochs):
