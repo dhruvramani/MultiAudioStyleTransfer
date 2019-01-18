@@ -48,7 +48,7 @@ def train_lossn(network_params):
 
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
     dataloader = iter(dataloader)
-    
+
     print('\n=> Loss {} Epoch: {}'.format(ida, epoch))
     train_loss, total = 0, 0
     params = list(encoder.parameters()) + list(decoder.parameters())
@@ -56,6 +56,7 @@ def train_lossn(network_params):
     
     for i in range(lstep, len(dataloader)):
         audios = next(dataloader)
+        audios = audios.to(device)
         if(type(audios) == int):
             print("=> Loss {} Network : Chucked Sample".format(ida))
             continue
@@ -63,6 +64,7 @@ def train_lossn(network_params):
         # Might have to remove the loop,, memory
         print(audios.shape)
         for audio in audios:
+            audio = audio[0]
             latent_space = encoder(audio)
             output = decoder(latent_space)
             optimizer.zero_grad()
