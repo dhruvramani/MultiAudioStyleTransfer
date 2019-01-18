@@ -22,7 +22,7 @@ from utils import progress_bar
 # TODO : Implement test
 parser = argparse.ArgumentParser(description='PyTorch Audio Style Transfer')
 parser.add_argument('--epoch', '-e', type=int, default=4, help='Number of epochs to train.')
-parser.add_argument('--batch_size', default=25, type=int)
+parser.add_argument('--batch_size', default=1, type=int)
 
 parser.add_argument('--resume1', '-r1', type=int, default=0, help='resume transform1 from checkpoint')
 parser.add_argument('--lr1', default=0.001, type=float, help='learning rate for transform1') 
@@ -46,7 +46,7 @@ def train_lossn(network_params):
     ida, epoch, lstep, lr, dataset = network_params["id"], network_params["epoch"], network_params["step"], network_params["lr"], network_params["dataset"]
     encoder, decoder = network_params["network"]
 
-    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True,  collate_fn=collate_fn)
+    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
     dataloader = iter(dataloader)
 
     print('\n=> Loss {} Epoch: {}'.format(ida, epoch))
@@ -102,7 +102,7 @@ def train_transformation(network_params):
     t_net, encoder = network_params["network"]
     print('\n=> Transformation {} Epoch: {}'.format(ida, epoch))
     
-    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True,  collate_fn=collate_fn)
+    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
     dataloader = iter(dataloader)
 
     train_loss, tr_con, tr_sty = 0, 0, 0
