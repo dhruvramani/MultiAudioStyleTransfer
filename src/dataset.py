@@ -113,7 +113,7 @@ class BackgroundDataset(Dataset):
         drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx])
         other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx])
         paths = [bass_path, drums_path, other_path]
-        audio, _ = load_audio(paths[n_splits])
+        audio, _ = load_audio(paths[self.n_splits])
 
         if(self.transform):
             audio, _ = self.transform(audio)
