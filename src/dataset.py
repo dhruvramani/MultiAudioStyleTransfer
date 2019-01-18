@@ -53,6 +53,7 @@ def get_style(path='style_lady.wav'):
 
 def splitAudio(audio, split_size = 300):
     auds = []
+    print(audio.shape)
     for i in range(audio.shape[1],split_size):
         a = audio[:,i:i+split_size]
         if(a.shape[1]<split_size):
@@ -86,7 +87,6 @@ class VocalDataset(Dataset):
 
     def __getitem__(self, idx):
         audio, _ = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
-        print(audio)
         if(self.transform):
             audio, _ = self.transform(audio)
             audio = torch.Tensor(audio)
