@@ -126,7 +126,8 @@ class BackgroundDataset(Dataset):
             audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
         # np.random.shuffle(audio)
-        audio = audio[:BATCH,:,:]
+        max_len = audio.shape[0]
+        audio = audio[max_len//2:max_len//2+BATCH,:,:]
         return audio
 
 
