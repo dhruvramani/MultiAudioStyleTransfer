@@ -54,7 +54,7 @@ def get_style(path='style_lady.wav'):
 def splitAudio(audio, split_size = 300):
     auds = []
     print(audio.shape)
-    for i in range(audio.shape[1],split_size):
+    for i in range(0,audio.shape[1],split_size):
         a = audio[:,i:i+split_size]
         if(a.shape[1]<split_size):
             a = librosa.util.pad_center(a, split_size)
