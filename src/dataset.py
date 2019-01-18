@@ -142,7 +142,7 @@ if __name__ == "__main__":
     for foo in dataloader:
         print(foo[0].shape)
         foo = foo[0]
-        a1 = foo[0].numpy()
+        a1 = foo[7].numpy()
         matplotlib.image.imsave('../save/plots/input/vocal.png', a1[0])
         break
     
