@@ -8,7 +8,7 @@ from feature import *
 from new_feature import *
 
 SPLIT = 120
-BATCH = 24
+BATCH = 10
 
 def load_audio(audio_path):
     signal, fs = librosa.load(audio_path)
