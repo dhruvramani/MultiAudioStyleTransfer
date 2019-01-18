@@ -132,11 +132,14 @@ if __name__ == "__main__":
     print("VocalDataset : ", len(data))
     for foo in dataloader:
         print(foo[0].shape)
+        break
     
     print("CombinedDataset : ", len(data1))
     for foo in dataloader1:
         print(foo[0].shape)
+        break
 
     print("BackgroundDataset : ", len(data2))
     for foo in dataloader2:
         print(foo[0].shape)
+        break
