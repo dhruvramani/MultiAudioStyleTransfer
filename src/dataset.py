@@ -89,8 +89,9 @@ class VocalDataset(Dataset):
         audio, _ = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
         if(self.transform):
             audio, _ = self.transform(audio)
-            audio = torch.Tensor(audio)
+
             audio = splitAudio(audio, split_size = 300)
+            audio = torch.Tensor(audio)
             audio = audio.unsqueeze(0)
             
         return audio
