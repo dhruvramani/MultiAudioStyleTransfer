@@ -47,9 +47,8 @@ def train_lossn(network_params):
     encoder, decoder = network_params["network"]
 
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
-
     dataloader = iter(dataloader)
-    print((dataloader.shape))
+    
     print('\n=> Loss {} Epoch: {}'.format(ida, epoch))
     train_loss, total = 0, 0
     params = list(encoder.parameters()) + list(decoder.parameters())
