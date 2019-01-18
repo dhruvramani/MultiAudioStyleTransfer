@@ -7,7 +7,7 @@ from os.path import basename
 from math import ceil
 
 
-FFT = 1536
+FFT = 512
 ITER = 10
 
 def loadAudioFile(filePath):
