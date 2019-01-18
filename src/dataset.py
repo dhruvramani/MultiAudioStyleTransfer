@@ -51,6 +51,16 @@ def get_style(path='style_lady.wav'):
     signal = signal.unsqueeze(0)
     return signal
 
+def splitAudio(audio, split_size = 300):
+    auds = []
+    for i in range(audio.shape[1],split_size):
+        a = audio[:,i:i+split_size]
+        if(a.shape[1]<split_size):
+            a = librosa.util.pad_center(a, split_size)
+        auds.append(a)
+        del a
+    return torch.stack(auds)
+    
 class CombinedDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev'):
         self.path = path
@@ -77,7 +87,9 @@ class VocalDataset(Dataset):
         if(self.transform):
             audio, _ = self.transform(audio)
             audio = torch.Tensor(audio)
+            audio = splitAudio(audio, split_size = 300)
             audio = audio.unsqueeze(0)
+            
         return audio
 
 class BackgroundDataset(Dataset):
