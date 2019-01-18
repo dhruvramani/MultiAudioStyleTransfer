@@ -63,9 +63,10 @@ def splitAudio(audio, split_size = 300):
     return torch.stack(auds)
 
 class CombinedDataset(Dataset):
-    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev'):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev', transform=None):
         self.path = path
         self.folder_names = [name for name in os.listdir(self.path)]
+        self.transform = transform
 
     def __len__(self):
         return len(self.folder_names)
@@ -98,10 +99,11 @@ class VocalDataset(Dataset):
         return audio
 
 class BackgroundDataset(Dataset):
-    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=0):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=0, transform=None):
         self.path = path
         self.n_splits = n_splits
         self.folder_names = [name for name in os.listdir(self.path)]
+        self.transform = transform
 
     def __len__(self):
         return len(self.folder_names)
