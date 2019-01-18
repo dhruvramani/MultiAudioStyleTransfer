@@ -73,6 +73,7 @@ class VocalDataset(Dataset):
 
     def __getitem__(self, idx):
         audio = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
+        print(audio)
         if(self.transform):
             audio = self.transform(audio)
         return audio
