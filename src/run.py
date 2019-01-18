@@ -61,8 +61,8 @@ def train_lossn(network_params):
             continue
 
         # Might have to remove the loop,, memory
+        print(audios.shape)
         for audio in audios:
-            print(audio.shape)
             latent_space = encoder(audio)
             output = decoder(latent_space)
             optimizer.zero_grad()
