@@ -55,13 +55,11 @@ def train_lossn(network_params):
     optimizer = torch.optim.Adam(params, lr=lr, weight_decay=args.decay)
     
     for i in range(lstep, len(dataloader)):
-        (audios, captions) = next(dataloader)
+        audios = next(dataloader)
         if(type(audios) == int):
             print("=> Loss {} Network : Chucked Sample".format(ida))
             continue
-        
-        del captions
-        audios = (audios[:, :, :, 0:500].to(device), audios[:, :, :, 500:1000].to(device))
+            
         # Might have to remove the loop,, memory
         for audio in audios:
             latent_space = encoder(audio)
