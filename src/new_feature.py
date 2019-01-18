@@ -30,10 +30,12 @@ def audioFileToSpectrogram(audioFile, fftWindowSize = FFT):
     spectrogram = librosa.stft(audioFile, fftWindowSize)
     phase = np.imag(spectrogram)
     amplitude = np.log1p(np.abs(spectrogram))
-    print(amplitude.shape)
-    mel=librosa.filters.mel(24000,FFT)
-    amplitude=np.matmul(mel,amplitude)
-    matplotlib.image.imsave('../save/plots/input/before.png', amplitude)
+    # print(amplitude.shape)
+
+    #Comment to remove MEL
+    mel = librosa.filters.mel(24000, fftWindowSize)
+    amplitude = np.matmul(mel,amplitude)
+    
     return amplitude, phase
 
 # This is the nutty one

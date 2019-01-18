@@ -124,7 +124,7 @@ def train_transformation(network_params):
         param.requires_grad = False
 
     # TODO : might have diff hyperparams for diff transformation
-    alpha, beta = 200, 100000 # TODO : CHANGEd from 7.5, 100 
+    alpha, beta = 100, 1000 # TODO : CHANGEd from 7.5, 100 
     gram = GramMatrix()
 
     style_audio = get_style(network_params["style"])

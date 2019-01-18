@@ -125,6 +125,7 @@ class BackgroundDataset(Dataset):
             audio, _ = self.transform(audio)
             audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
+        audio = np.random.shuffle(audio)
         audio = audio[:BATCH,:,:]
         return audio
 
@@ -141,16 +142,21 @@ if __name__ == "__main__":
         print(foo[0].shape)
         foo = foo[0]
         a1 = foo[0].numpy()
+        matplotlib.image.imsave('../save/plots/input/vocal.png', a1[0])
         break
     
     print("CombinedDataset : ", len(data1))
     for foo in dataloader1:
-        matplotlib.image.imsave('../save/plots/combine.png', foo[0][0].numpy())
         print(foo[0].shape)
+        foo = foo[0]
+        a1 = foo[0].numpy()
+        matplotlib.image.imsave('../save/plots/input/combine.png', a1[0])
         break
 
     print("BackgroundDataset : ", len(data2))
     for foo in dataloader2:
-        matplotlib.image.imsave('../save/plots/back.png', foo[0])
         print(foo[0].shape)
+        foo = foo[0]
+        a1 = foo[0].numpy()
+        matplotlib.image.imsave('../save/plots/input/background.png', a1[0])
         break
