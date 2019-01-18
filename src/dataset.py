@@ -5,6 +5,7 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 
 from feature import *
+from new_feature import *
 
 def load_audio(audio_path):
     signal, fs = librosa.load(audio_path)
@@ -62,7 +63,7 @@ class CombinedDataset(Dataset):
         return load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx]))
 
 class VocalDataset(Dataset):
-    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev'):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', transform=None):
         self.path = path
         self.folder_names = [name for name in os.listdir(self.path)]
 
@@ -70,7 +71,10 @@ class VocalDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        return load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
+        audio = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
+        if(self.transform):
+            audio = self.transform(audio)
+        return audio
 
 class BackgroundDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=3):
@@ -91,9 +95,8 @@ class BackgroundDataset(Dataset):
 
 if __name__ == "__main__":
     data = CombinedDataset()
-    dataloader = DataLoader(data, batch_size=1)
+    dataloader = DataLoader(data, batch_size=1, transform=audioFileToSpectrogram)
     print(len(data))
     for foo in dataloader:
-        foo = inp_transform(foo[0])
         print(foo.shape)
         break
