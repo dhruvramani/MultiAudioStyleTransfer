@@ -8,6 +8,7 @@ from feature import *
 from new_feature import *
 
 SPLIT = 120
+BATCH = 24
 
 def load_audio(audio_path):
     signal, fs = librosa.load(audio_path)
@@ -80,7 +81,7 @@ class CombinedDataset(Dataset):
             audio, _ = self.transform(audio)
             audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
-        
+        audio = audio[:BATCH,:,:]
         return audio
 
 class VocalDataset(Dataset):
@@ -98,6 +99,7 @@ class VocalDataset(Dataset):
             audio, _ = self.transform(audio)
             audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
+        audio = audio[:BATCH,:,:]
         return audio
 
 class BackgroundDataset(Dataset):
@@ -121,6 +123,7 @@ class BackgroundDataset(Dataset):
             audio, _ = self.transform(audio)
             audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
+        audio = audio[:BATCH,:,:]
         return audio
 
 
