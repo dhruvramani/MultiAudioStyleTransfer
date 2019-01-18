@@ -87,7 +87,7 @@ class VocalDataset(Dataset):
         if(self.transform):
             audio, _ = self.transform(audio)
             audio = splitAudio(audio, split_size = 300)
-            audio = audio.unsqueeze(0)
+            audio = audio.unsqueeze(1)
         return audio
 
 class BackgroundDataset(Dataset):
@@ -112,5 +112,5 @@ if __name__ == "__main__":
     dataloader = DataLoader(data, batch_size=1)
     print(len(data))
     for foo in dataloader:
-        print(foo.shape)
+        print(foo[0].shape)
         break
