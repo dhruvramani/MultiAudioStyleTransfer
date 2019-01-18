@@ -59,9 +59,10 @@ def train_lossn(network_params):
         if(type(audios) == int):
             print("=> Loss {} Network : Chucked Sample".format(ida))
             continue
-            
+
         # Might have to remove the loop,, memory
         for audio in audios:
+            print(audio.shape)
             latent_space = encoder(audio)
             output = decoder(latent_space)
             optimizer.zero_grad()
