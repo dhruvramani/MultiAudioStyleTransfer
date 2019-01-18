@@ -5,7 +5,7 @@ import warnings
 import skimage.io as io
 from os.path import basename
 from math import ceil
-
+import matplotlib
 
 FFT = 512
 ITER = 10
@@ -31,6 +31,9 @@ def audioFileToSpectrogram(audioFile, fftWindowSize = FFT):
     phase = np.imag(spectrogram)
     amplitude = np.log1p(np.abs(spectrogram))
     print(amplitude.shape)
+    mel=librosa.filters.mel(24000,FFT)
+    amplitude=np.matmul(mel,amplitude)
+    matplotlib.image.imsave('../save/plots/input/before.png', amplitude)
     return amplitude, phase
 
 # This is the nutty one

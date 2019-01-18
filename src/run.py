@@ -67,7 +67,7 @@ def train_lossn(network_params):
             latent_space = encoder(audio)
             output = decoder(latent_space)
             optimizer.zero_grad()
-            loss = loss_fn(output, audio[:, :, :, :-3])
+            loss = loss_fn(output, audio[:, :, :-3, :-3])
             loss.backward()
             optimizer.step()
 
