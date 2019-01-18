@@ -57,10 +57,13 @@ def splitAudio(audio, split_size = 300):
         a = audio[:,i:i+split_size]
         if(a.shape[1]<split_size):
             a = librosa.util.pad_center(a, split_size)
+
+        print(a)
         auds.append(a)
         del a
+    print(auds)
     return torch.stack(auds)
-    
+
 class CombinedDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Mixtures/Dev'):
         self.path = path
