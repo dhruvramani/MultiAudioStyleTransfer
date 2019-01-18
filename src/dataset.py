@@ -66,6 +66,7 @@ class VocalDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', transform=None):
         self.path = path
         self.folder_names = [name for name in os.listdir(self.path)]
+        self.transform = transform
 
     def __len__(self):
         return len(self.folder_names)
