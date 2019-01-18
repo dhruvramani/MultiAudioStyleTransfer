@@ -71,7 +71,14 @@ class CombinedDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        return load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx]))
+        audio, _ = load_audio("{}/{}/mixture.wav".format(self.path, self.folder_names[idx]))
+
+        if(self.transform):
+            audio, _ = self.transform(audio)
+            audio = splitAudio(audio, split_size = 300)
+            audio = audio.unsqueeze(1)
+        
+        return audio
 
 class VocalDataset(Dataset):
     def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', transform=None):
@@ -91,7 +98,7 @@ class VocalDataset(Dataset):
         return audio
 
 class BackgroundDataset(Dataset):
-    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=3):
+    def __init__(self, path='/home/nevronas/dataset/dualaudio/DSD100/Sources/Dev', n_splits=0):
         self.path = path
         self.n_splits = n_splits
         self.folder_names = [name for name in os.listdir(self.path)]
@@ -103,14 +110,31 @@ class BackgroundDataset(Dataset):
         bass_path = "{}/{}/bass.wav".format(self.path, self.folder_names[idx])
         drums_path = "{}/{}/drums.wav".format(self.path, self.folder_names[idx])
         other_path = "{}/{}/other.wav".format(self.path, self.folder_names[idx])
-        paths = [drums_path, bass_path, other_path]
-        return (load_audio(paths[i]) for i in range(self.n_splits))
+        paths = [bass_path, drums_path, other_path]
+        audio, _ = load_audio(paths[i])
+
+        if(self.transform):
+            audio, _ = self.transform(audio)
+            audio = splitAudio(audio, split_size = 300)
+            audio = audio.unsqueeze(1)
+        return audio
 
 
 if __name__ == "__main__":
     data = VocalDataset(transform=audioFileToSpectrogram)
+    data1 = CombinedDataset(transform = audioFileToSpectrogram)
+    data2 = BackgroundDataset(transform = audioFileToSpectrogram)
     dataloader = DataLoader(data, batch_size=1)
-    print(len(data))
+    dataloader1 = DataLoader(data1, batch_size=1)
+    dataloader2 = DataLoader(data2, batch_size=1)
+    print("VocalDataset : ", len(data))
     for foo in dataloader:
         print(foo[0].shape)
-        break
+    
+    print("CombinedDataset : ", len(data1))
+    for foo in dataloader1:
+        print(foo[0].shape)
+
+    print("BackgroundDataset : ", len(data2))
+    for foo in dataloader2:
+        print(foo[0].shape)
