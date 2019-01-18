@@ -94,7 +94,7 @@ class BackgroundDataset(Dataset):
 
 
 if __name__ == "__main__":
-    data = CombinedDataset()
+    data = VocalDataset()
     dataloader = DataLoader(data, batch_size=1, transform=audioFileToSpectrogram)
     print(len(data))
     for foo in dataloader:
