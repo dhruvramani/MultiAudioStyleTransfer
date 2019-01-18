@@ -74,7 +74,7 @@ def train_lossn(network_params):
             a1 = audio[0].cpu().numpy()
             a2 = output[0].detach().cpu().numpy()
             matplotlib.image.imsave('../save/plots/input/loss1/before.png', a1[0])
-            matplotlib.image.imsave('../save/plots/input/loss2/after.png', a2[0])
+            matplotlib.image.imsave('../save/plots/input/loss1/after.png', a2[0])
         
 
         del audios
