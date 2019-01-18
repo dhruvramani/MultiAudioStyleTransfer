@@ -72,10 +72,10 @@ class VocalDataset(Dataset):
         return len(self.folder_names)
 
     def __getitem__(self, idx):
-        audio = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
+        audio, _ = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
         print(audio)
         if(self.transform):
-            audio = self.transform(audio)
+            audio, _ = self.transform(audio)
         return audio
 
 class BackgroundDataset(Dataset):
