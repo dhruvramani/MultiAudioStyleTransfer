@@ -53,16 +53,12 @@ def get_style(path='style_lady.wav'):
 
 def splitAudio(audio, split_size = 300):
     auds = []
-    print(audio.shape)
     for i in range(0,audio.shape[1],split_size):
         a = audio[:,i:i+split_size]
         if(a.shape[1]<split_size):
             a = librosa.util.pad_center(a, split_size)
-
-        print(a)
         auds.append(a)
         del a
-    print(auds)
     return torch.stack(auds)
 
 class CombinedDataset(Dataset):
@@ -89,9 +85,8 @@ class VocalDataset(Dataset):
         audio, _ = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
         if(self.transform):
             audio, _ = self.transform(audio)
-
-            audio = splitAudio(audio, split_size = 300)
             audio = torch.Tensor(audio)
+            audio = splitAudio(audio, split_size = 300)
             audio = audio.unsqueeze(0)
             
         return audio
