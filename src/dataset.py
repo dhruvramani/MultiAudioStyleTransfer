@@ -76,6 +76,8 @@ class VocalDataset(Dataset):
         print(audio)
         if(self.transform):
             audio, _ = self.transform(audio)
+            audio = torch.Tensor(audio)
+            audio = audio.unsqueeze(0)
         return audio
 
 class BackgroundDataset(Dataset):
