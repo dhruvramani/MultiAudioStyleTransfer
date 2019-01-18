@@ -136,15 +136,18 @@ if __name__ == "__main__":
     dataloader2 = DataLoader(data2, batch_size=1)
     print("VocalDataset : ", len(data))
     for foo in dataloader:
+        matplotlib.image.imsave('../save/plots/vocal.png', foo[0])
         print(foo[0].shape)
         break
     
     print("CombinedDataset : ", len(data1))
     for foo in dataloader1:
+        matplotlib.image.imsave('../save/plots/combine.png', foo[0])
         print(foo[0].shape)
         break
 
     print("BackgroundDataset : ", len(data2))
     for foo in dataloader2:
+        matplotlib.image.imsave('../save/plots/back.png', foo[0])
         print(foo[0].shape)
         break
