@@ -7,6 +7,8 @@ from torch.utils.data import Dataset, DataLoader
 from feature import *
 from new_feature import *
 
+SPLIT = 120
+
 def load_audio(audio_path):
     signal, fs = librosa.load(audio_path)
     return signal, fs
@@ -76,7 +78,7 @@ class CombinedDataset(Dataset):
 
         if(self.transform):
             audio, _ = self.transform(audio)
-            audio = splitAudio(audio, split_size = 300)
+            audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
         
         return audio
@@ -94,7 +96,7 @@ class VocalDataset(Dataset):
         audio, _ = load_audio("{}/{}/vocals.wav".format(self.path, self.folder_names[idx]))
         if(self.transform):
             audio, _ = self.transform(audio)
-            audio = splitAudio(audio, split_size = 300)
+            audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
         return audio
 
@@ -117,7 +119,7 @@ class BackgroundDataset(Dataset):
 
         if(self.transform):
             audio, _ = self.transform(audio)
-            audio = splitAudio(audio, split_size = 300)
+            audio = splitAudio(audio, split_size = SPLIT)
             audio = audio.unsqueeze(1)
         return audio
 
