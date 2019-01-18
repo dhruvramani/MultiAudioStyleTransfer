@@ -7,6 +7,8 @@ from torch.utils.data import Dataset, DataLoader
 from feature import *
 from new_feature import *
 
+import matplotlib
+
 SPLIT = 120
 BATCH = 10
 
