@@ -267,9 +267,9 @@ def train_multiast():
                     "t2" : {"id" : 2, "network" : [t_net2, enc2], "lr" : args.lr2, "epoch" : tsepoch2, "step" : tstep2, "dataset" : background_ds, "style" : "guy.mp3"},
                     "l1" : {"id" : 1, "network" : [enc1, dec1], "lr" : args.loss_lr1, "epoch" : lsepoch1, "step" : lstep1, "dataset" : foreground_ds},
                     "l2" : {"id" : 2, "network" : [enc2, dec2], "lr" : args.loss_lr2, "epoch" : lsepoch2, "step" : lstep2, "dataset" : background_ds}}
-
+    network = {"l1":"", "l2":""."t1":"","t2",""}
     for epoch in range(lsepoch1, lsepoch1 + args.epoch):
-        network_dict["l1"] = train_lossn(network_dict["l1"])
+        network["l1"] = train_lossn(network_dict["l1"])
 
     # NOTE : Uncomment    
     #for epoch in range(lsepoch2, lsepoch1 + args.epoch):
